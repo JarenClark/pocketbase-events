@@ -2,7 +2,15 @@ import React from 'react'
 import pb from '../lib/pocketbase'
 import { Bell, Bolt, Calendar, Group, Hamburger, SearchIcon } from './SVG'
 
+
+import { getUsers } from '../lib/pocketbase'
+import { useQuery } from 'react-query'
+
 function Dashboard() {
+
+    const allUsers = useQuery(["users"], getUsers)
+    
+    console.log(JSON.stringify(allUsers))
     return (
         <div className='flex overflow-x-hidden bg-[#181818] text-gray-400 w-screen min-h-screen'>
             <div className="flex w-full max-w-screen">
@@ -13,7 +21,16 @@ function Dashboard() {
                     style={{ width: '-webkit-fill-available' }}>
                     <Searchbar />
                     <Main>
-                        <h1 className=''>Dashboard</h1>
+                        <div className='p-8'>
+                            <h3>USERS</h3>
+                            <ul>
+                                {/* {allUsers.map(user => (
+                                    <li>
+                                        {JSON.stringify(user)}
+                                    </li>
+                                ))} */}
+                            </ul>
+                        </div>
                     </Main>
                 </div>
             </div>
@@ -76,9 +93,15 @@ function Sidebar() {
 }
 
 function Main({ children }) {
+    let title = 'Dashboard'
     return (
         <div className='p-8 lg:px-16'>
-            <main>{children}</main>
+            <main>
+                <h1>{title}</h1>
+                <div className="shadow-2xl mt-8 border border-red-500 rounded-xl">
+                    {children}
+                </div>
+            </main>
         </div>
     )
 }

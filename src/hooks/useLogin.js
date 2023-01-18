@@ -4,7 +4,6 @@ import { useMutation } from 'react-query'
 
 export default function useLogin() {
 
-
     async function login(data) {
         try {
             const authData = await pb
@@ -15,5 +14,5 @@ export default function useLogin() {
         }
     }
 
-    return useMutation(  login)
+    return useMutation( login )
 }
