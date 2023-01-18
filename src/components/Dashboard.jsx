@@ -1,16 +1,15 @@
 import React from 'react'
-import pb from '../lib/pocketbase'
+import pb, { getEventsForUser, getGroupsForUser } from '../lib/pocketbase'
+import useLogout from '../hooks/useLogout'
 import { Bell, Bolt, Calendar, Group, Hamburger, SearchIcon } from './SVG'
 
-
-import { getUsers } from '../lib/pocketbase'
 import { useQuery } from 'react-query'
 
 function Dashboard() {
 
-    const allUsers = useQuery(["users"], getUsers)
-    
-    console.log(JSON.stringify(allUsers))
+    const myGroups = useQuery(["groups"], getGroupsForUser)
+    const myEvents = useQuery(["events"], getEventsForUser)
+
     return (
         <div className='flex overflow-x-hidden bg-[#181818] text-gray-400 w-screen min-h-screen'>
             <div className="flex w-full max-w-screen">
@@ -22,13 +21,23 @@ function Dashboard() {
                     <Searchbar />
                     <Main>
                         <div className='p-8'>
-                            <h3>USERS</h3>
+                            <h3>Upcoming Events</h3>
                             <ul>
-                                {/* {allUsers.map(user => (
+                                {myEvents?.data?.map(event => (
                                     <li>
-                                        {JSON.stringify(user)}
+                                        {JSON.stringify(event)}
                                     </li>
-                                ))} */}
+                                ))}
+                            </ul>
+                        </div>
+                        <div className='p-8'>
+                            <h3>Groups</h3>
+                            <ul>
+                                {myGroups?.data?.map(group => (
+                                    <li>
+                                        {JSON.stringify(group)}
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                     </Main>
@@ -60,6 +69,14 @@ function Searchbar() {
 
 function Sidebar() {
 
+    const logout = useLogout()
+
+    async function onSubmit(data) {
+        login(data);
+        reset();
+    }
+
+
     let navItems = [
         { icon: <Bolt />, title: 'Home', link: '/' },
         { icon: <Group />, title: 'Groups', link: '' },
@@ -87,6 +104,8 @@ function Sidebar() {
             <div className="p-8">
                 Logged in as:{' '}
                 {pb.authStore.model.username}
+                <br/>
+                <button onClick={logout}>Logout</button>
             </div>
         </div>
     )
@@ -98,7 +117,7 @@ function Main({ children }) {
         <div className='p-8 lg:px-16'>
             <main>
                 <h1>{title}</h1>
-                <div className="shadow-2xl mt-8 border border-red-500 rounded-xl">
+                <div className="shadow-2xl mt-8 border border-black rounded-xl">
                     {children}
                 </div>
             </main>

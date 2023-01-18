@@ -25,14 +25,9 @@ function Auth( {children} ) {
 
     if(loginState) {
         return(
-            <div>
                 <>
                     {children}
-                </>
-                
-                <h2>Logged in as: <code>{pb.authStore.isValid && pb.authStore.model.email}</code> </h2><br />
-                <button onClick={logout}>Logout</button>
-            </div>
+                </> 
         )
     }
 
